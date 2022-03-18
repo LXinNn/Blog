@@ -1,0 +1,82 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav" th:fragment="Navigation">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">Start Bootstrap</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto py-4 py-lg-0" th:if="${username}!=null">
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/}">Home</a></li>
+    <!--                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/toAbout}">About</a></li>-->
+                    <!--转到登录界面-->
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/toPerShow/+${username}+@{/show}}"></a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/toBack}">Management</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/logout}">logout</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto py-4 py-lg-0" th:if="${username}==null">
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/toAbout}">About</a></li>
+                    <!--转到登录界面-->
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/login}">please signin</a></li>
+                    <!--                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" th:href="@{/logout}">logout</a></li>-->
+                </ul>
+        </div>
+
+    </div>
+</nav>
+
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('/assets/img/home-bg.jpg')" th:fragment="Header">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1 th:text="${#strings.isEmpty(name)?'LRE Blog':name}"></h1>
+                    <span class="subheading" th:if="${#strings.isEmpty(name)}">A Blog For Learn, Record and Exchange </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Footer-->
+<footer class="border-top" th:fragment="Footer">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a th:href="@{index.html}">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a th:href="@{index.html}">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                    </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a th:href="@{index.html}">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
+            </div>
+        </div>
+    </div>
+</footer>

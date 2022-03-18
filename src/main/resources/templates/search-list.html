@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>搜索</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="stylesheet" type="text/css" href="/css/animate.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/line-awesome.css">
+<link rel="stylesheet" type="text/css" href="/css/line-awesome-font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mCustomScrollbar.min.css">
+<link rel="stylesheet" type="text/css" href="/lib/slick/slick.css">
+<link rel="stylesheet" type="text/css" href="/lib/slick/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/responsive.css">
+</head>
+
+
+<body>
+	
+
+	<div class="wrapper">
+		
+
+
+		<header>
+			<div class="container">
+				<div class="header-data">
+					<div class="logo pd-btm">
+						<a th:href="@{/}" title=""><img src="/images/logo.jpg" alt=""></a>
+					</div><!--logo end-->
+					<div class="forum-bar">
+						<a th:href="@{/}" ><h2 >Home</h2></a>
+<!--						<ul>-->
+<!--							<li><a href="#" title="">Tags</a></li>-->
+<!--							<li><a href="#" title="">Users</a></li>-->
+<!--							<li><a href="#" title="" class="ask-question">Ask a question</a></li>-->
+<!--						</ul>-->
+					</div><!--search-bar end-->
+					<div class="login_register" shiro:guest>
+						<ul>
+							<li><a th:href="@{/login}">Login</a></li>
+						</ul>
+					</div><!--login_register end-->
+					<div class="user-account" shiro:user>
+						<div class="user-info">
+							<img src="/images/resources/user.png" alt="">
+							<a href="#" title=""><shiro:principal property="name"/></a>
+							<i class="la la-sort-down"></i>
+						</div>
+						<div class="user-account-settingss">
+							<h3 class="tc"><a th:href="@{/toBack}" title="">My Posts</a></h3>
+							<h3 class="tc" shiro:hasRole="admin"><a th:href="@{/toAdmin}" title="">Admin</a></h3>
+							<h3 class="tc"><a th:href="@{/logout}" title="">Logout</a></h3>
+						</div><!--user-account-settingss end-->
+					</div>
+					<div class="search-bar st2">
+						<form th:action="@{/search}">
+							<input type="text" name="keyword" placeholder="Search...">
+							<button type="submit"><i class="la la-search"></i></button>
+						</form>
+					</div><!--search-bar end-->
+
+				</div><!--header-data end-->
+			</div>
+		</header>	
+
+
+		<section class="forum-page">
+			<div class="container">
+				<div class="forum-questions-sec">
+					<div class="row">
+						<div class="col-lg-8">
+							<div class="forum-questions" th:each="post:${posts}">
+								<div class="usr-question">
+									<div class="usr_img">
+										<img src="http://via.placeholder.com/60x60" alt="">
+									</div>
+									<div class="usr_quest">
+										<a th:href="@{/toPost/}+${post.getId()}+@{/show}"><h3 th:text="${post.getTitle()}"></h3></a>
+										<a><h3 th:text="'Post By '+${post.getAuthor()}"></h3></a>
+<!--										<ul class="quest-tags">-->
+<!--											<li><a href="#" title="" th:text="${post.getCategory()}"></a></li>-->
+<!--										</ul>-->
+										<ul class="react-links">
+											<li><a href="#" title=""><i class="fa fa-heart"></i> Like [[${post.getStar()}]]</a></li>
+											<li><a href="#" title=""><i class="fa fa-comment"></i> Comments  [[${post.getComments().size()}]]</a></li>
+											<li><a href="#" title=""><i class="fa fa-eye"></i> Views  [[${post.getView()}]]</a></li>
+										</ul>
+
+									</div><!--usr_quest end-->
+									<span class="quest-posted-time"><i class="fa fa-clock-o"></i>[[${#dates.format(post.getDate(),'yyyy-MM-dd')}]]</span>
+								</div><!--usr-question end-->
+							</div><!--forum-questions end-->
+							<nav aria-label="Page navigation example" class="full-pagi">
+								<ul class="pagination" th:if="${search}">
+									<li class="page-item"><a class="page-link pvr" th:href="@{/searchList/}+${keyword}+@{/}+${currentPage>1?currentPage-1:currentPage}+@{/show}">Previous</a></li>
+									<li class="page-item"><a class="page-link active" th:text="${currentPage}"></a></li>
+									<li class="page-item"><a class="page-link pvr" th:href="@{/searchList/}+${keyword}+@{/}+${currentPage<maxPage?currentPage+1:maxPage}+@{/show}">Next</a></li>
+								</ul>
+								<ul class="pagination" th:if="${cate}">
+									<li class="page-item"><a class="page-link pvr" th:href="@{/toPostCate/}+${category}+@{/}+${currentPage>1?currentPage-1:currentPage}+@{/}">Previous</a></li>
+									<li class="page-item"><a class="page-link active" th:text="${currentPage}"></a></li>
+									<li class="page-item"><a class="page-link pvr" th:href="@{/toPostCate/}+${category}+@{/}+${currentPage<maxPage?currentPage+1:maxPage}+@{/}">Next</a></li>
+								</ul>
+								<ul class="pagination" th:if="${istag}">
+									<li class="page-item"><a class="page-link pvr" th:href="@{/toPostTag/}+${tag}+@{/}+${currentPage>1?currentPage-1:currentPage}+@{/}">Previous</a></li>
+									<li class="page-item"><a class="page-link active" th:text="${currentPage}"></a></li>
+									<li class="page-item"><a class="page-link pvr" th:href="@{/toPostTag/}+${tag}+@{/}+${currentPage<maxPage?currentPage+1:maxPage}+@{/}">Next</a></li>
+								</ul>
+							</nav>
+						</div>
+						<div class="col-lg-4">
+							<div class="widget widget-user">
+								<h3 class="title-wd">Hot Post Top 3</h3>
+								<ul  th:each="post:${postsTop3}">
+									<li>
+										<div class="usr-msg-details">
+											<div class="usr-mg-info">
+												<a th:href="@{/toPost/}+${post.getId()}+@{/show}"><h3 th:text="${post.getTitle()}"></h3></a>
+												<p></p>
+											</div><!--usr-mg-info end-->
+										</div>
+										<span><img src="/images/price1.png" alt="" th:text="${post.getView()}"></span>
+									</li>
+								</ul>
+							</div><!--widget-user end-->
+						</div>
+					</div>
+				</div><!--forum-questions-sec end-->
+			</div>
+		</section><!--forum-page end-->
+
+		<footer>
+			<div class="footy-sec mn no-margin">
+				<div class="container">
+					<p><img src="/images/copy-icon2.png" alt="">Copyright 2022</p>
+				</div>
+			</div>
+		</footer>
+
+
+	</div><!--theme-layout end-->
+
+
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/popper.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/lib/slick/slick.min.js"></script>
+<script type="text/javascript" src="/js/script.js"></script>
+/
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+server:
+  port: 8085
+  max-http-header-size: 10485760
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    username: root
+    password: nlx123456
+    url: jdbc:mysql://localhost:3306/mydatabase?characterEncoding=utf8&useUnicode&serverTimeZone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+
+  mvc:
+    format:
+      date: 'yyyy-MM-dd HH:mm:ss'
+
+
+debug: true
+mybatis:
+  type-aliases-package: com.niu.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml

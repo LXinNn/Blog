@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/animate.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/line-awesome.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/line-awesome-font-awesome.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery.mCustomScrollbar.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/lib/slick/slick.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/lib/slick/slick-theme.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/responsive.css}">
+</head>
+
+
+<body>
+	
+
+	<div class="wrapper">
+		
+
+
+		<header>
+			<div class="container">
+				<div class="header-data">
+					<div class="logo">
+						<a th:href="@{/}" title=""><img src="/images/logo.jpg" alt=""></a>
+					</div><!--logo end-->
+					<div class="search-bar">
+						<form th:action="@{/search}">
+							<input type="text" name="keyword" placeholder="Search...">
+							<button type="submit"><i class="la la-search"></i></button>
+						</form>
+					</div><!--search-bar end-->
+					<nav>
+						<ul>
+							<li>
+								<a th:href="@{/}" title="">
+									<span><img src="/images/icon1.png" alt=""></span>
+									Home
+								</a>
+							</li>
+							<li>
+								<a th:href="@{/categories}" title="">
+									<span><img src="/images/icon2.png" alt=""></span>
+									Categories
+								</a>
+							</li>
+							<li>
+								<a th:href="@{/tags}" title="">
+									<span><img src="/images/icon3.png" alt=""></span>
+									tags
+								</a>
+							</li>
+						</ul>
+					</nav><!--nav end-->
+					<div class="menu-btn">
+						<a href="#" title=""><i class="fa fa-bars"></i></a>
+					</div><!--menu-btn end-->
+					<div class="user-account" shiro:user>
+						<div class="user-info">
+							<img src="/images/resources/user.png" alt="">
+							<a href="#" title=""><shiro:principal property="name"/></a>
+							<i class="la la-sort-down"></i>
+						</div>
+						<div class="user-account-settingss">
+							<h3 class="tc"><a th:href="@{/toBack}" title="">My Posts</a></h3>
+							<h3 class="tc" shiro:hasRole="admin"><a th:href="@{/toAdmin}" title="">Admin</a></h3>
+							<h3 class="tc"><a th:href="@{/logout}" title="">Logout</a></h3>
+						</div><!--user-account-settingss end-->
+					</div>
+				</div><!--header-data end-->
+			</div>
+		</header><!--header end-->	
+
+		<main>
+			<div class="main-section">
+				<div class="container">
+					<div class="main-section-data">
+						<div class="row">
+							<div class="col-lg-9 col-md-8 pd-left-none no-pd">
+								<div class="main-ws-sec">
+									<div class="post-topbar" shiro:user="">
+										<div class="user-picy">
+											<img src="/images/resources/user-pic.png" alt="">
+										</div>
+										<div class="post-st">
+											<ul>
+												<li><a class="active" th:href="@{/toPost}">Post a Blog</a></li>
+											</ul>
+										</div><!--post-st end-->
+									</div><!--post-topbar end-->
+									<div class="posts-section" th:each="post:${posts}">
+										<div class="post-bar">
+											<div class="post_topbar">
+												<div class="usy-dt">
+													<img src="/images/resources/us-pic.png" alt="">
+													<div class="usy-name">
+														<h3 th:text="${post.getAuthor()}"></h3>
+														<span><img src="/images/clock.png" alt="" th:text="${#dates.format(post.getDate(),'yyyy-MM-dd HH-mm-ss')}"></span>
+													</div>
+												</div>
+											</div>
+											<div class="epi-sec">
+												<ul class="descp" th:each="tag:${post.getTags()}">
+													<li><img src="/images/icon9.png" alt=""><span><a th:text="${tag.getText()}" th:href="@{/toPostTag/}+${tag.getText()}+@{/}+1+@{/}"></a></span></li>
+												</ul>
+												<ul class="bk-links">
+<!--													收藏按钮-->
+<!--													<li><a href="#" title=""><i class="la la-bookmark"></i></a></li>-->
+<!--													<li><a href="#" title=""><i class="la la-envelope"></i></a></li>-->
+												</ul>
+											</div>
+											<div class="job_descp">
+												<a th:href="@{/toPost/}+${post.getId()}+@{/show}"><h3 th:text="${post.getTitle()}"></h3></a>
+												<ul class="job-dt">
+													<li><a th:href="@{/toPostCate/}+${post.getCategory().getText()}+@{/}+1+@{/}" title="" th:text="${post.getCategory().getText()}"></a></li>
+												</ul>
+												<p th:text="${post.getDescription()}"><a th:href="@{/toPost/}+${post.getId()}+@{/show}" title="">view more</a></p>
+											</div>
+											<div class="job-status-bar">
+												<ul class="like-com">
+													<li>
+														<a href="#" title="" class="com"><img class="la" src="/images/com.png" alt="" th:text="${post.getComments().size()}"></a>
+													</li>
+												</ul>
+												<a th:text="'likes '+${post.getStar()}"></a>
+												<a th:text="'views '+${post.getView()}+' , '"></a>
+											</div>
+										</div><!--post-bar end-->
+									</div><!--posts-section end-->
+									<nav aria-label="Page navigation example" class="full-pagi">
+										<ul class="pagination">
+											<li class="page-item"><a class="page-link pvr active" th:href="@{/getPostByPage/}+${currentPage>1?currentPage-1:currentPage}+@{/show}">Previous</a></li>
+											<li class="page-item"><a class="page-link active" th:text="${currentPage}"></a></li>
+											<li class="page-item"><a class="page-link pvr active" th:href="@{/getPostByPage/}+${currentPage<maxPage?currentPage+1:maxPage}+@{/show}">Next</a></li>
+										</ul>
+									</nav>
+								</div><!--main-ws-sec end-->
+							</div>
+							<div class="col-lg-3 pd-right-none no-pd">
+								<div class="right-sidebar">
+									<div class="widget widget-about" shiro:guest="">
+										<img src="/images/wd-logo.png" alt="">
+										<h3>Blog</h3>
+										<span>For Learn and Share</span>
+										<div class="sign_link">
+											<h3><a th:href="@{/login}" title="">Login in</a></h3>
+										</div>
+									</div><!--widget-about end-->
+									<div class="widget widget-jobs">
+										<div class="sd-title">
+											<h3>Most Viewed</h3>
+											<i class="la la-ellipsis-v"></i>
+										</div>
+										<div class="jobs-list" th:each="post:${postsViewTop}">
+											<div class="job-info">
+												<div class="job-details">
+													<a th:href="@{/toPost/}+${post.getId()}+@{/show}"><h3 th:text="${post.getTitle()}"></h3></a>
+													<p th:text="${post.getDescription()}"></p>
+												</div>
+												<div class="hr-rate">
+													<span th:text="'views '+${post.getView()}"></span>
+<!--													<i class="la la-eye"></i>-->
+												</div>
+											</div><!--job-info end-->
+										</div><!--jobs-list end-->
+									</div><!--widget-jobs end-->
+									<div class="widget widget-jobs">
+										<div class="sd-title">
+											<h3>Least Post</h3>
+											<i class="la la-ellipsis-v"></i>
+										</div>
+										<div class="jobs-list" th:each="post:${postsLeast}">
+											<div class="job-info">
+												<div class="job-details">
+													<a th:href="@{/toPost/}+${post.getId()}+@{/show}"><h3 th:text="${post.getTitle()}"></h3></a>
+													<p th:text="${#dates.format(post.getDate(),'yyyy-MM-dd')}"></p>
+												</div>
+											</div><!--job-info end-->
+										</div><!--jobs-list end-->
+									</div><!--widget-jobs end-->
+									<div class="widget widget-jobs">
+										<div class="sd-title">
+											<h3>Least Comment</h3>
+											<i class="la la-ellipsis-v"></i>
+										</div>
+										<div class="jobs-list" th:each="comment:${commentsLeast}">
+											<div class="job-info">
+												<div class="job-details">
+													<a th:href="@{/toPost/}+${comment.getPost().getId()}+@{/show}"><h3 th:text="${comment.getPost().getTitle()}"></h3></a>
+													<p th:text="${comment.getName()}+ ': ' +${comment.getText}"></p>
+												</div>
+											</div><!--job-info end-->
+										</div><!--jobs-list end-->
+									</div><!--widget-jobs end-->
+								</div><!--right-sidebar end-->
+							</div>
+						</div>
+					</div><!-- main-section-data end-->
+				</div> 
+			</div>
+		</main>
+	</div><!--theme-layout end-->
+
+
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.mCustomScrollbar.js}"></script>
+<script type="text/javascript" th:src="@{/lib/slick/slick.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/scrollbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>分类</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="stylesheet" type="text/css" href="/css/animate.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="/css/line-awesome.css">
+<link rel="stylesheet" type="text/css" href="/css/line-awesome-font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/lib/slick/slick.css">
+<link rel="stylesheet" type="text/css" href="/lib/slick/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/responsive.css">
+</head>
+
+
+<body>
+	
+
+	<div class="wrapper">
+		
+
+
+		<header>
+			<div class="container">
+				<div class="header-data">
+					<div class="logo">
+						<a th:href="@{/}" title=""><img src="/images/logo.jpg" alt=""></a>
+					</div><!--logo end-->
+					<div class="search-bar">
+						<form th:action="@{/search}">
+							<input type="text" name="keyword" placeholder="Search...">
+							<button type="submit"><i class="la la-search"></i></button>
+						</form>
+					</div><!--search-bar end-->
+					<nav>
+						<ul>
+							<li>
+								<a th:href="@{/}" title="">
+									<span><img src="/images/icon1.png" alt=""></span>
+									Home
+								</a>
+							</li>
+						</ul>
+					</nav><!--nav end-->
+					<div class="menu-btn">
+						<a href="#" title=""><i class="fa fa-bars"></i></a>
+					</div><!--menu-btn end-->
+					<div class="user-account" shiro:user>
+						<div class="user-info">
+							<img src="/images/resources/user.png" alt="">
+							<a href="#" title=""><shiro:principal property="name"/></a>
+							<i class="la la-sort-down"></i>
+						</div>
+						<div class="user-account-settingss">
+							<h3 class="tc"><a th:href="@{/toBack}" title="">My Posts</a></h3>
+							<h3 class="tc" shiro:hasRole="admin"><a th:href="@{/toAdmin}" title="">Admin</a></h3>
+							<h3 class="tc"><a th:href="@{/logout}" title="">Logout</a></h3>
+						</div><!--user-account-settingss end-->
+					</div>
+				</div><!--header-data end-->
+			</div>
+		</header><!--header end-->	
+
+
+		<section class="companies-info">
+			<div class="container">
+				<div class="company-title">
+					<h3>All Categories</h3>
+				</div><!--company-title end-->
+				<div class="companies-list">
+					<div class="row">
+						<div class="col-lg-3 col-md-4 col-sm-6" th:each="category:${categories}">
+							<div class="company_profile_info">
+								<div class="company-up-info">
+									<img src="/images/resources/cmp-icon1.png" alt="">
+									<a><h3 th:text="${category.getText()}"></h3></a>
+									<h4 th:text="'total: '+${category.getPosts().size()}+' posts'"></h4>
+								</div>
+								<a th:href="@{/toPostCate/}+${category.getText()}+@{/}+1+@{/}" title="" class="view-more-pro">View</a>
+							</div><!--company_profile_info end-->
+						</div>
+					</div>
+				</div><!--companies-list end-->
+			</div>
+		</section><!--companies-info end-->
+	</div><!--theme-layout end-->
+
+
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/popper.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/flatpickr.min.js"></script>
+<script type="text/javascript" src="/lib/slick/slick.min.js"></script>
+<script type="text/javascript" src="/js/script.js"></script>
+</body>
+</html>

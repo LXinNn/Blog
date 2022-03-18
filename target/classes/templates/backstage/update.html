@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>博客编辑</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<!--    <link rel="stylesheet" th:href="@{/BSstatic/css/font.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/BSstatic/css/xadmin.css}">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/markdown/css/editormd.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap.min.js}">
+<!--    <script type="text/javascript" th:src="@{/BSstatic/lib/layui/layui.js}" charset="utf-8"></script>-->
+<!--    <script type="text/javascript" th:src="@{/BSstatic/js/xadmin.js}"></script>-->
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+</head>
+
+<body style="height: 900px">
+<div style="height: 100%">
+    <div id="md-content" style="z-index: 1 !important;" onchange="test()">
+        <textarea class="editormd-markdown-textarea" name="$id-markdown-doc" id="md" th:text="${post.getMdtext()}" th:if="${update}"></textarea>
+        <textarea class="editormd-markdown-textarea" name="$id-markdown-doc" id="md" th:if="${!update}"></textarea>
+
+        <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
+        <textarea class="editormd-html-textarea" name="$id-html-code"></textarea>
+<!--        <textarea form="post" th:text="${post.getText()}" name="text"></textarea>-->
+    </div>
+
+    <!-- 这里必须先引入jquery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <!-- 引入js -->
+    <script src="/markdown/editormd.min.js"></script>
+    <script type="text/javascript">
+        //初始化Markdown编辑器
+        var contentEditor = editormd("md-content", {
+            width   : "100%",//宽度
+            // height  : 500,//高度
+            syncScrolling : "single",//单滚动条
+            path    : "/markdown/lib/",//依赖的包路径
+            theme: "dark",//工具栏主题
+            previewTheme: "dark",//预览主题
+            // saveHTMLToTextarea : true
+        });
+        function test() {
+            document.getElementById('htmltext').value=contentEditor.getPreviewedHTML();
+            document.getElementById('mdtext').value=$('.editormd-markdown-textarea').html();
+            console.log(1);
+            console.log(contentEditor.getPreviewedHTML());
+        };
+
+    </script>
+    <form class="row" id="post" th:action="@{/update/}+${post.getId()}+@{/}" th:if="${update}" style="padding-right: 50px;padding-left: 50px">
+        <div class="col-12">
+            <label class="visually-hidden" for="autoSizingInput">Title</label>
+            <input name="title" type="text" class="form-control" id="autoSizingInput" placeholder="Title" th:value="${post.getTitle()}">
+        </div>
+        <div class="col-12">
+            <label class="visually-hidden" for="autoSizingInputGroup">Description</label>
+            <div class="input-group">
+<!--                <div class="input-group-text">@</div>-->
+                <input type="text" class="form-control" id="autoSizingInputGroup" name="description" placeholder="Description" th:value="${post.getDescription()}">
+            </div>
+        </div>
+        <div class="col-12" style="padding-top: 30px">
+            <label class="visually-hidden" for="autoSizingSelect">Category</label>
+            <select class="form-select" id="autoSizingSelect" name="category">
+                <option selected th:text="${post.getCategory().getText()}" th:value="${post.getCategory().getText()}"></option>
+                <option th:each="category:${categories}" th:value="${category.getText()}" th:text="${category.getText()}"></option>
+            </select>
+        </div>
+        <div class="col-12" style="padding-top: 30px">
+            Tag
+            <div th:each="tag:${post.getTags()}">
+            <input type="checkbox" th:value="${tag.getText()}" name="tag" checked>
+                <label th:text="${tag.getText()}"></label>
+            </div>
+            <div th:each="tag:${tags}">
+            <input type="checkbox" th:value="${tag.getText()}" name="tag">
+                <label th:text="${tag.getText()}"></label>
+            </div>
+        </div>
+<!--        <input type="hidden" th:value="${post.getAuthor()}" name="author">-->
+<!--        <input type="hidden" th:value="${post.getDate()}" name="date">-->
+        <input type="hidden" name="htmltext" id="htmltext">
+        <input type="hidden" name="mdtext" id="mdtext">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    <form class="row" id="post" th:action="@{/post}" th:if="${!update}" style="padding-right: 50px;padding-left: 50px">
+        <div class="col-12">
+            <label class="visually-hidden" for="autoSizingInput">Title</label>
+            <input name="title" type="text" class="form-control" id="autoSizingInput" placeholder="Title">
+        </div>
+        <div class="col-12">
+            <label class="visually-hidden" for="autoSizingInputGroup">Description</label>
+            <div class="input-group">
+                <!--                <div class="input-group-text">@</div>-->
+                <input type="text" class="form-control" id="autoSizingInputGroup" name="description" placeholder="Description">
+            </div>
+        </div>
+        <div class="col-12" style="padding-top: 30px">
+            <label class="visually-hidden" for="autoSizingSelect">Category</label>
+            <select class="form-select" id="autoSizingSelect" name="category">
+                <option th:each="category:${categories}" th:value="${category.getText()}" th:text="${category.getText()}"></option>
+            </select>
+        </div>
+        <div class="col-12" style="padding-top: 30px">
+            Tag
+            <div th:each="tag:${tags}" >
+            <input type="checkbox" th:value="${tag.getText()}"  name="tag">
+                <label th:text="${tag.getText()}"></label>
+            </div>
+        </div>
+        <input type="hidden" name="htmltext" id="htmltext">
+        <input type="hidden" name="mdtext" id="mdtext">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+        <input type="hidden" name="date" th:value="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm:ss')}">
+    </form>
+</div>
+</body>
+<script>
+    window.onload=test();
+
+</script>
+
+</html>
